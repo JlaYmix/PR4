@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formAnswers = document.querySelector('#formAnswers');
     const prevBtn = document.querySelector('#prev');
     const nextBtn = document.querySelector('#next');
+    const sendBtn = document.querySelector('#send');
 
     const questions = [
         {
@@ -49,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     let numberQuestion = 0;
+    const finalAnswers = [];
 
     const renderAnswers = (index) => {
         const { answers, type } = questions[index];
@@ -72,18 +74,72 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const renderPhoneStep = () => {
+        questionTitle.textContent = 'Введіть ваш номер телефону';
+        formAnswers.innerHTML = `
+            <div class="form-group w-100 px-3">
+                <label for="number">Номер телефону</label>
+                <input type="tel" class="form-control" id="number" placeholder="+380 XX XXX XX XX">
+            </div>
+        `;
+    };
+
     const renderQuestions = (index) => {
         formAnswers.innerHTML = '';
-        questionTitle.textContent = questions[index].question;
-        renderAnswers(index);
 
-        prevBtn.classList.toggle('d-none', index === 0);
-        nextBtn.classList.toggle('d-none', index === questions.length - 1);
+        switch (index) {
+            case 0:
+                prevBtn.classList.add('d-none');
+                nextBtn.classList.remove('d-none');
+                sendBtn.classList.add('d-none');
+                break;
+            case questions.length:
+                prevBtn.classList.remove('d-none');
+                nextBtn.classList.add('d-none');
+                sendBtn.classList.remove('d-none');
+                break;
+            default:
+                prevBtn.classList.remove('d-none');
+                nextBtn.classList.remove('d-none');
+                sendBtn.classList.add('d-none');
+                break;
+        }
+
+        if (index === questions.length) {
+            renderPhoneStep();
+        } else {
+            questionTitle.textContent = questions[index].question;
+            renderAnswers(index);
+        }
+    };
+
+    const checkAnswers = () => {
+        const obj = {};
+
+        const inputs = [...formAnswers.elements].filter(elem => {
+            return elem.checked || elem.id === 'number';
+        });
+
+        inputs.forEach((elem, i) => {
+            if (numberQuestion < questions.length) {
+                obj[`${i}_${questions[numberQuestion].question}`] = elem.value;
+            } else {
+                obj['Номер телефону'] = elem.value;
+            }
+        });
+
+        finalAnswers[numberQuestion] = obj;
     };
 
     const playTest = () => {
         numberQuestion = 0;
+        finalAnswers.length = 0;
+        sendBtn.disabled = false;
         renderQuestions(numberQuestion);
+    };
+
+    const closeTest = () => {
+        modalBlock.classList.remove('d-block');
     };
 
     btnOpenModal.addEventListener('click', () => {
@@ -91,11 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
         playTest();
     });
 
-    closeModal.addEventListener('click', () => {
-        modalBlock.classList.remove('d-block');
-    });
+    closeModal.addEventListener('click', closeTest);
 
     nextBtn.onclick = () => {
+        checkAnswers();
         numberQuestion++;
         renderQuestions(numberQuestion);
     };
@@ -103,5 +158,24 @@ document.addEventListener('DOMContentLoaded', () => {
     prevBtn.onclick = () => {
         numberQuestion--;
         renderQuestions(numberQuestion);
+    };
+
+    sendBtn.onclick = () => {
+        const phone = document.querySelector('#number');
+        if (!phone || !phone.value.trim()) {
+            phone && phone.classList.add('is-invalid');
+            return;
+        }
+
+        checkAnswers();
+        sendBtn.disabled = true;
+        console.log(finalAnswers);
+
+        questionTitle.textContent = '';
+        formAnswers.textContent = 'Дякую, наш менеджер з вами зв\'яжеться';
+        prevBtn.classList.add('d-none');
+        sendBtn.classList.add('d-none');
+
+        setTimeout(closeTest, 2000);
     };
 });
