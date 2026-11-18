@@ -45,6 +45,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 <input type="tel" class="form-control" id="number" placeholder="+380 XX XXX XX XX">
             </div>
         `;
+<<<<<<< HEAD
+=======
+    };
+
+    const renderQuestions = (index) => {
+        formAnswers.innerHTML = '';
+
+        switch (index) {
+            case 0:
+                prevBtn.classList.add('d-none');
+                nextBtn.classList.remove('d-none');
+                sendBtn.classList.add('d-none');
+                break;
+            case questions.length:
+                prevBtn.classList.remove('d-none');
+                nextBtn.classList.add('d-none');
+                sendBtn.classList.remove('d-none');
+                break;
+            default:
+                prevBtn.classList.remove('d-none');
+                nextBtn.classList.remove('d-none');
+                sendBtn.classList.add('d-none');
+                break;
+        }
+
+        if (index === questions.length) {
+            renderPhoneStep();
+        } else {
+            questionTitle.textContent = questions[index].question;
+            renderAnswers(index);
+        }
+    };
+
+    const checkAnswers = () => {
+        const obj = {};
+
+        const inputs = [...formAnswers.elements].filter(elem => {
+            return elem.checked || elem.id === 'number';
+        });
+
+        inputs.forEach((elem, i) => {
+            if (numberQuestion < questions.length) {
+                obj[`${i}_${questions[numberQuestion].question}`] = elem.value;
+            } else {
+                obj['Номер телефону'] = elem.value;
+            }
+        });
+
+        finalAnswers[numberQuestion] = obj;
+>>>>>>> d53410bac9fa8400b6f63445fb258818b258df96
     };
 
     const renderQuestions = (index) => {
@@ -106,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalBlock.classList.remove('d-block');
     };
 
+<<<<<<< HEAD
     const getData = () => {
         questionTitle.textContent = '';
         formAnswers.textContent = 'LOAD';
@@ -123,6 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     };
 
+=======
+>>>>>>> d53410bac9fa8400b6f63445fb258818b258df96
     btnOpenModal.addEventListener('click', () => {
         modalBlock.classList.add('d-block');
         getData();
@@ -152,9 +205,12 @@ document.addEventListener('DOMContentLoaded', () => {
         sendBtn.disabled = true;
         console.log(finalAnswers);
 
+<<<<<<< HEAD
         firebase.database().ref().child('contacts').push(finalAnswers)
             .catch(err => console.error(err));
 
+=======
+>>>>>>> d53410bac9fa8400b6f63445fb258818b258df96
         questionTitle.textContent = '';
         formAnswers.textContent = 'Дякую, наш менеджер з вами зв\'яжеться';
         prevBtn.classList.add('d-none');
