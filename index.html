@@ -82,20 +82,6 @@
           <h5 class="question p-1 p-sm-2 p-md-3 text-center" id="question"></h5>
           <div class="answers w-100 p-1 p-sm-2 p-md-3" id="answers">
             <form action="#" id="formAnswers" class="formAnswers d-flex flex-wrap justify-content-around">
-              <!-- <div class="answers-item d-flex flex-column">
-                <input type="radio" id="answerItem1" name="answer" class="d-none">
-                <label for="answerItem1" class="d-flex flex-column justify-content-between">
-                  <img class="answerImg" src="./image/burger.png" alt="burger">
-                  <span>Стандарт</span>
-                </label>
-              </div>
-              <div class="answers-item d-flex justify-content-center">
-                <input type="radio" id="answerItem2" name="answer" class="d-none">
-                <label for="answerItem2" class="d-flex flex-column justify-content-between">
-                  <img class="answerImg" src="./image/burgerBlack.png" alt="burger">
-                  <span>Чорний</span>
-                </label>
-              </div> -->
             </form>
           </div>
         </div>
@@ -108,6 +94,21 @@
     </div>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: 'YOUR_API_KEY',
+      authDomain: 'myfarebase-a8611.firebaseapp.com',
+      databaseURL: 'https://myfarebase-a8611-default-rtdb.europe-west1.firebasedatabase.app',
+      projectId: 'myfarebase-a8611',
+      storageBucket: 'myfarebase-a8611.appspot.com',
+      messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+      appId: 'YOUR_APP_ID'
+    };
+
+    firebase.initializeApp(firebaseConfig);
+  </script>
   <script src="./script/script.js"></script>
 </body>
 
